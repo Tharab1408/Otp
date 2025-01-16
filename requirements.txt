@@ -1,3 +1,4 @@
 Flask
 secure-smtplib
-Gunicorn
+gunicorn
+mysql.connector

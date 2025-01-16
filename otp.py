@@ -1,12 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
 import random
 import smtplib
-
+import mysql.connector as ab
 app = Flask(__name__)
 
 # Stored value for comparison
 
-
+a = ab.MySQLConnection(user="u1sx4e4btldmsrvr",passwd="8pqDmE7hpq1W86NB0vY7",host="beflgzmj8s2ob1bb7owi-mysql.services.clever-cloud.com",database="beflgzmj8s2ob1bb7owi")
+ab="Failed"
+b=a.cursor()
 @app.route("/", methods=["GET"])
 def index():
     return render_template("web.html", stage=1)
@@ -14,6 +16,7 @@ def index():
 @app.route("/otp", methods=["POST"])
 def otp():
     global val
+    global mail
     # Retrieve the name from the form
     mail = request.form.get("mail")
     print(mail)
@@ -32,6 +35,38 @@ def otp():
 def verify():
     # Retrieve the number from the form
     number = request.form.get("number")
+  
+    b.execute("select*from otpapp;")
+    c=b.fetchall()
+    
+    success = number == val
+    if number==val:
+            
+        ab="Verified"
+    else:
+        
+        ab="Failed"
+    
+    for i in c:
+        if mail in i:
+      
+            query="update otpapp set Authentication='{}' where mail='{}'".format(ab,mail)
+            b.execute(query)
+            a.commit()
+            break
+    else:
+        
+        query="insert into otpapp values ('{}',{},'{}')".format(mail,number,ab)
+        
+        b.execute(query)
+        a.commit()
+       
+    
+    
+    
+    
+    
+    
     # Check if the input matches the stored value
     success = number == val
     return render_template("web.html", stage=3, success=success)
