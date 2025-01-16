@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            color: white;
+        }
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            border: 1px solid #444;
+            border-bottom: none;
+        }
+        .tab.active {
+            background-color: #1e90ff;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #444;
+            background-color: #222;
+            margin: 0 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e90ff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #007acc;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab active" onclick="openTab('mail')">Mail</div>
+        <div class="tab" onclick="openTab('otp')">OTP 2</div>
+        <div class="tab" onclick="openTab('verify')">Verify</div>
+    </div>
+
+    <div id="mail" class="tab-content active">
+
+        <form action="/otp" method="POST">
+            <input type="text" name="mail" placeholder="Enter your mail" required>
+            <button type="submit">Send OTP</button>
+        </form>
+    </div>
+
+    <div id="otp" class="tab-content">
+        <h2>Input 6-Digit OTP</h2>
+        <form action="/verify" method="POST">
+            <input type="text" name="number" placeholder="Enter 6-digit number" maxlength="6" pattern="\d{6}" required>
+            <button type="submit">Verify</button>
+        </form>
+    </div>
+
+    <div id="verify" class="tab-content">
+       
+        {% if success %}
+        <p style="color: green;">Your Mail is verified..</p>
+        {% else %}
+        <p style="color: red;">Failure! OTP mismatched..</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // Function to handle tab switching
+        function openTab(tabId) {
+            // Hide all tab content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show the selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Mark the clicked tab as active
+            event.currentTarget.classList.add('active');
+        }
+
+        // Automatically open the appropriate tab based on Flask variables
+        {% if stage == 1 %}
+        openTab('mail');
+        {% elif stage == 2 %}
+        openTab('otp');
+        {% elif stage == 3 %}
+        openTab('verify');
+        {% endif %}
+    </script>
+</body>
+</html>
