@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Stored value for comparison
 
-a = ab.MySQLConnection(user="u1sx4e4btldmsrvr",passwd="8pqDmE7hpq1W86NB0vY7",host="beflgzmj8s2ob1bb7owi-mysql.services.clever-cloud.com",database="beflgzmj8s2ob1bb7owi")
+a = ab.MySQLConnection(user="root",passwd="thar123",host="localhost",database="otp")
 ab="Failed"
 b=a.cursor()
 @app.route("/", methods=["GET"])
